@@ -1,0 +1,420 @@
+@import url("./utils/reset.css");
+@import url("./fonts.css"); /* 폰트 CSS를 여기에 임포트하여 한곳에서 관리 */
+
+/* Swup transition styles */
+.transition-slide {
+	transition: transform 0.3s ease;
+	transform: translateX(0);
+}
+
+html.is-animating .transition-slide {
+	transform: translateX(-100%);
+}
+
+
+body {
+	background: #0D0D0D;
+	font-family: "Inter", "SUIT", sans-serif;
+	font-size: .875rem;
+	line-height: 1.5;
+	color: rgba(255, 255, 255, .7);
+	-webkit-font-smoothing: antialiased; /* Cross-browser font smoothing */
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	scrollbar-gutter: stable;
+}
+
+body::before {
+	position: fixed;
+	top: 0;
+	left: 0;
+	content: "";
+	width: 100vw;
+	height: 100vh;
+	background: url("../assets/images/noise.gif");
+	mix-blend-mode: overlay;
+	opacity: .3;
+	pointer-events: none; /* Add this to prevent interference with interactions */
+	z-index: -1; /* Ensure it stays in the background */
+}
+
+.container {
+	display: flex;
+	height: 100%;
+	min-height: 100dvh;
+	position: relative;
+}
+
+aside {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 280px;
+	flex: 0 0 280px;
+	background: rgba(19, 19, 20, .5);
+	box-sizing: border-box;
+	border-right: 1px solid rgba(255, 255, 255, 0.04);
+	backdrop-filter: blur(5px);
+	overflow-y: auto;
+	position: sticky;
+	top: 0;
+	height: 100vh;
+
+	padding: 50px 35px 35px 35px;
+}
+
+aside div.header h1 { /* div h1 대신 div.header로 명확화 */
+	margin-bottom: 70px; /* 원래 h1에 있던 margin-bottom을 div.header로 옮김 */
+}
+
+aside h1,
+aside h1 a {
+	font-weight: 700;
+	font-size: 1.125rem;
+	line-height: 140%;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #fff;
+}
+
+
+.navigation ul {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.navigation li {
+	position: relative;
+	font-family: "Inter", "SUIT", sans-serif;
+	font-size: .75rem;
+}
+
+.navigation li a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, .3); /* 기본 비활성화 색상 */
+    width: 100%;
+    /* 추가: 트랜지션 효과를 주어 색상 변경이 부드럽게 */
+    transition: color 0.3s ease;
+}
+
+.navigation li a:hover {
+	color: rgba(255, 255, 255, .6);
+}
+
+/* 활성화된 카테고리의 링크 (상위, 서브 모두) */
+.navigation li.active-category > a, /* 최상위 active-category 링크 */
+.navigation li a[aria-current="page"] { /* 서브메뉴 내 현재 페이지 링크 */
+	color: #fff; /* 활성화 시 흰색 */
+	font-weight: 600; /* 활성화 시 굵게 */
+}
+
+/* .navigation li::before 부분은 기존대로 유지하면 됩니다. */
+.navigation li::before {
+	display: inline-block;
+	content: "·";
+	color: rgba(255, 255, 255, .2);
+	margin-right: 5px;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+.navigation li i.arrow {
+	display: inline-block;
+	font-family: "SUIT", sans-serif;
+	font-weight: 400;
+	margin-left: 5px;
+	transition: transform 0.3s ease; /* 화살표 회전 애니메이션 추가 */
+}
+
+.navigation li i.arrow::after {
+	display: block;
+	content: "↑";
+}
+
+.navigation li[aria-expanded="true"] i.arrow {
+	transform: rotate(180deg); /* 펼쳐졌을 때 화살표 회전 */
+}
+
+.navigation ul.sub-category {
+	margin: 8px 0 15px 0;
+	padding-left: 10px; /* 서브 카테고리 들여쓰기 */
+	display: none;
+}
+
+.navigation ul.sub-category[aria-hidden="false"] { /* hidden 속성 대신 aria-hidden 사용 */
+	display: flex;
+}
+
+.navigation ul.sub-category li::before {
+	visibility: hidden;
+}
+
+aside footer {
+	font-family: "Inter";
+	font-weight: 400;
+	font-size: .6875rem;
+	line-height: 140%;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, .2);
+}
+
+.main-content {
+	margin: 0 auto;
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.main-content .content-header {
+	position: sticky;
+	top: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	justify-content: center;
+	align-items: center;
+	padding: 50px 90px 25px 25px;
+	min-height: 100px;
+	background: linear-gradient(180deg, #0D0D0D 0%, rgba(13, 13, 13, 0) 100%);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+	backdrop-filter: saturate(180%) blur(20px);
+	z-index: 10;
+	box-sizing: border-box;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.content-header h3 {
+	font-weight: 700;
+	font-size: 1.125rem;
+	color: #fff;
+}
+
+.content-header p {
+	color: rgba(255, 255, 255, .6);
+	font-size: .875rem;
+}
+
+
+nav.pagination {
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 45px;
+}
+
+nav.pagination ul {
+	display: flex;
+	width: 45px;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	align-content: flex-start;
+	padding: 5px;
+	gap: 5px;
+}
+
+nav.pagination ul li a {
+	display: block;
+	border-radius: 2px;
+	width: 15px;
+	height: 15px;
+	background: rgba(255, 255, 255, .05);
+	border: 1px solid rgba(255, 255, 255, .04);
+	text-indent: -999999px;
+}
+
+nav.pagination ul li a:hover {
+	background: rgba(255, 255, 255, .3);
+	border: 1px solid rgba(255, 255, 255, .04);
+}
+
+nav.pagination ul li a[aria-current="true"] {
+	background: rgba(255, 255, 255, 1);
+}
+
+
+
+.post-content {
+	display: flex;
+	flex-direction: column-reverse;
+	clear: both;
+	width: 1050px;
+	margin: 0 65px 20vh 0;
+}
+
+.post-description header {
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
+	margin-bottom: 10px;
+	align-items: center;
+	line-height: 1;
+	float: left;
+}
+
+.post-description header h2,
+.post-description header h2 a {
+	font-weight: 700;
+	font-size: 1.25rem;
+	line-height: 140%;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.post-description header time {
+	font-weight: 400;
+	font-size: .75rem;
+	color: rgba(255, 255, 255, .5);
+}
+
+.post-meta { /* post-description > ul 대신 post-meta 클래스 사용 */
+	float: right;
+	list-style: none; /* 기본 list-style 제거 */
+	padding: 0; /* 기본 padding 제거 */
+	margin: 0; /* 기본 margin 제거 */
+	display: flex; /* 가로 정렬 */
+	gap: 10px; /* 항목 간 간격 */
+}
+
+.post-meta li a {
+	color: rgba(255, 255, 255, .5);
+	text-decoration: none;
+	font-size: .75rem;
+}
+
+.post-meta li a:hover {
+	color: rgba(255, 255, 255, .8);
+}
+
+
+.post-description > div {
+	clear: both;
+	font-weight: 400;
+	font-size: .875rem;
+	line-height: 150%;
+	text-align: left;
+	color: rgba(255, 255, 255, .5);
+}
+
+.post-description > div p {
+	margin-bottom: 10px;
+}
+
+.post-image {
+	position: relative;
+	margin: 30px 0;
+}
+
+.post-image__wrapper {
+	position: relative;
+	border-radius: 10px;
+	overflow: hidden;
+	min-width: 100%;
+	width: fit-content;
+	min-height: 500px;
+	line-height: 1;
+	user-select: none;
+	-webkit-user-drag: none; /* Cross-browser user-drag */
+	z-index: 1;
+
+	background: linear-gradient(100deg, rgba(255, 255, 255, .5) 40%, rgba(255, 255, 255, .7) 50%, rgba(255, 255, 255, .5) 60%);
+	background-size: 200% 100%;
+	background-position-x: 180%;
+	animation: post-image-loadingAnimation 1.25s infinite ease-in-out;
+}
+
+@keyframes post-image-loadingAnimation {
+	90% {
+		background-position-x: -20%;
+	}
+
+	100% {
+		background-position-x: -20%;
+	}
+}
+
+.post-image__wrapper img {
+	min-width: 100%;
+	transform: scale(1.01);
+	border-radius: 11px;
+	display: block; /* 이미지 하단 여백 제거 */
+}
+
+.post-image__wrapper::after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	content: "";
+	display: block;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	mix-blend-mode: overlay;
+	opacity: .5;
+	z-index: 1;
+}
+
+.post-image__information {
+	position: absolute;
+	width: 100%;
+	padding: 15px 15px 15px 12px;
+	bottom: 2px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	box-sizing: border-box;
+
+	font-family: "Inter", sans-serif;
+	font-weight: 400;
+}
+
+.post-image__wrapper .post-image__copyright {
+	font-size: .625rem;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, .5);
+	mix-blend-mode: difference;
+}
+
+.post-image__exif-data {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 5px 15px;
+	gap: 10px;
+	background: rgba(0, 0, 0, 0.4);
+	backdrop-filter: blur(4px);
+	border-radius: 200px;
+	width: fit-content;
+	font-size: .675rem;
+	color: rgba(255, 255, 255, .4);
+	border: 1px solid rgba(255, 255, 255, .05);
+
+	opacity: 0;
+	transform: translateY(10px);
+	transition: .25s ease-out;
+}
+
+.post-image:hover .post-image__exif-data {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+
+.post-image__effect {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 0;
+	border-radius: 10px;
+	transform: scale(.9);
+	opacity: 0.3;
+	filter: blur(250px);
+	transform-origin: center;
+}
